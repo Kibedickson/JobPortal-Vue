@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Job as ResourcesJob;
 use App\Job;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,13 @@ class JobController extends Controller
      */
     public function index()
     {
-        //
+        //Get jobs
+        $jobs = Job::paginate(5);
+
+        // Return collection of jobs as a resource
+        return ResourcesJob::collection($jobs);
+
+
     }
 
     /**
@@ -41,12 +48,17 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Job  $job
      * @return \Illuminate\Http\Response
      */
-    public function show(Job $job)
+    public function show($id)
     {
-        //
+
+        // Get a single job
+        $job = Job::findOrFail($id);
+
+        // Return a single job as a resource
+        return new ResourcesJob($job);
+
     }
 
     /**
